@@ -1,13 +1,13 @@
 /* blahoo_tree.cc - Implements a binary tree structure.
-	Tree structure maintains the pointer to the first Blah_Tree_Element structure
-	FIXME!!! */
+	Tree structure maintains the pointer to the first Blah_Tree_Element structure */
 
 #include "blahoo_tree.h"
 
 /* Element Function Declarations */
 	
-BlahooTreeElement::BlahooTreeElement(char *key, void *data) : BlahooWrapper<Blah_Tree_Element, BlahooTreeElement>(Blah_Tree_Element_new(key,data))
+BlahooTreeElement::BlahooTreeElement(char *key, void *data)
 {
+	//Blah_Tree_Element_new(key,data)
 	//Constructor - Creates a new tree element 
 }
 
@@ -38,40 +38,41 @@ void *BlahooTreeElement::search(blah_tree_search_func *search_function, void *ar
 
 /* Tree Function Declarations */
 		
-BlahooTree::BlahooTree(char *name) : BlahooWrapper<Blah_Tree, BlahooTree>(Blah_Tree_new((char*)name))
+BlahooTree::BlahooTree(const char *name)
 {
+	//Blah_Tree_new((char*)name)
 	//creates new empty tree
 }
 
-blah_bool BlahooTree::remove_element(char *key)
+blah_bool BlahooTree::remove_element(const char *key)
 {
 	//Removes element with given key from tree.  Does not free data pointed to by tree element.
 	//Returns zero if error
 	return BLAH_TRUE;
 }
 
-blah_bool BlahooTree::insert_element(char *key, void *data)
+blah_bool BlahooTree::insert_element(const char *key, const void *data)
 {
 	//Inserts a new element into the tree, with given key and data pointer
 	return BLAH_TRUE;
 }
 
-void BlahooTree::call_function(void *function)
+void BlahooTree::call_function(const void *function)
 {	//Calls function for each element, using data pointer as argument to given function 
 	return;
 }
 
-void BlahooTree::call_with_arg(void *function, void *arg)
+void BlahooTree::call_with_arg(const void *function, const void *arg)
 {	//Calls function for each element, using data pointer as argument to given function
 	return;
 }
 
-void BlahooTree::init(char *name)
+void BlahooTree::init(const char *name)
 {	//Sets the name of the tree, and first element pointer to NULL
 	return;
 }
 
-Blah_Tree_Element *BlahooTree::find_element(char *key)
+Blah_Tree_Element *BlahooTree::find_element(const char *key)
 {	//Finds tree element with given key
 	return (Blah_Tree_Element*)1;
 }

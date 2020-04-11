@@ -42,25 +42,25 @@ typedef class BlahooTree : private BlahooWrapper<Blah_Tree, BlahooTree>
 	/* Tree Function Prototypes */
 		
 	public:
-		BlahooTree(char *name);	//creates new empty tree
+		BlahooTree(const char *name);	//creates new empty tree
 
-		blah_bool remove_element(char *key);
+		blah_bool remove_element(const char *key);
 			//Removes element with given key from tree.  Does not free data pointed to by tree element.
 			//Returns zero if error
 	
-		blah_bool insert_element(char *key, void *data);
+		blah_bool insert_element(const char *key, const void *data);
 			//Inserts a new element into the tree, with given key and data pointer
 	
-		void call_function(void *function); 
+		void call_function(const void *function); 
 			//Calls function for each element, using data pointer as argument to given function 
 	
-		void call_with_arg(void *function, void *arg); 
+		void call_with_arg(const void *function, const void *arg); 
 			//Calls function for each element, using data pointer as argument to given function
 
-		void init(char *name);
+		void init(const char *name);
 			//Sets the name of the tree, and first element pointer to NULL
 	
-		Blah_Tree_Element *find_element(char *key);
+		Blah_Tree_Element *find_element(const char *key);
 			//Finds tree element with given key
 			
 		void *search(blah_tree_search_func *search_function, void *arg);

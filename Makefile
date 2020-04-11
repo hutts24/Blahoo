@@ -1,7 +1,7 @@
 #BLAH_USE_GLUT = 0
 
-all: blahoo_shared
-#all: All
+All: blahoo_shared
+all: All
 
 clean:
 	rm *.o
@@ -17,12 +17,8 @@ BLAHOOFILES := $(shell echo *.cc)
 
 BLAHOOOBJS := $(subst .cc,.o, $(BLAHOOFILES))
 
-INCLUDEDIRS := -I.
-
-LIBDIRS := -L.
-
 %.o : %.cc %.h
-	$(CXX) $(INCLUDEDIRS) -c -std=c++0x -Wall -Werror  -fPIC $< -o $@
+	$(CXX) -c -Wall -Werror  -fPIC $< -o $@
 
 blahoo_shared: $(BLAHOOOBJS)
 	g++ -Wall -Werror $(BLAHOOOBJS) $(LIBFLAGS) $(BLAHOODEFS) -shared -o libblahoo.so

@@ -22,13 +22,12 @@ class BlahooWrapper
 	//private local type definitions for this template scope only
 //	typedef class BlahooWrapper<Base_Struct, WrapperSubclass> Wrapper;
 
-	typedef void (*void_hook_func)(Base_Struct*, void*);
-	typedef void (*set_void_hook_func)(Base_Struct*, void_hook_func, void*);
+	typedef void (*void_hook_func)(Base_Struct*);
+	typedef void (*set_void_hook_func)(Base_Struct*, void_hook_func);
 	typedef void (*void_base_func)(Base_Struct*);
 	typedef void (WrapperSubclass::*void_class_func)();
 	
-private: //Private variables
-	const blah_bool free_base_struct;
+//	private: //Private variables
 			
 protected: //Constructors are protected so as to only allow deriving classes to create wrappers
 
@@ -38,10 +37,6 @@ protected: //Constructors are protected so as to only allow deriving classes to 
 
 protected:	
 	//Protected Functions
-	BlahooWrapper() : free_base_struct(BLAH_FALSE)
-	{	//Single constructor accepts a base struct object pointer to construct wrapper around
-	}
-	
 	
 /*	void callBaseFunction(base_func base_func, set_void_hook_func set_func, void_hook_func wrapper_hook_func);
 		//Calls the given function pointer for the base struct object contained in this wrapper object.
@@ -54,12 +49,11 @@ protected:
 		//Before calling the function, the set hook function is called to set the hook function to NULL,
 		//to force the default function behaviour.  Following the call to the true base function, the 
 		//set hook function is called once again to instate the given wrapper hook function
-		set_func(&base_struct, NULL, NULL); //Set the base struct hook func to NULL
+		set_func(&base_struct, NULL); //Set the base struct hook func to NULL
 		base_func(&base_struct); //Call the base func, using the address of the encapsulated object
-		set_func(&base_struct, wrapper_hook_func, this); //Replace the base hook func with the given pointer to wrapper hook
+		set_func(&base_struct, wrapper_hook_func); //Replace the base hook func with the given pointer to wrapper hook
 	}
-
-
+	
 	static WrapperSubclass *castBasePointer(Base_Struct *base_pointer)
 	{	//Given the pointer of a base object contained within a class object extending BlahooWrapper,
 		//locates and returns a pointer to the encompassing subclass object which derives from BlahooWrapper.
@@ -74,42 +68,28 @@ protected:
 	
 		return new_pointer; //Return pointer to subclass object
 	}
-
 	
-	static void destructorHook(Base_Struct *base_pointer, void *wrapper_object)
+	static void destructorHook(Base_Struct *base_pointer)
 	{	//This function is used as a hook from the static C struct object destroy function pointer to call
 		//the destructor for the wrapper class object
 		std::cout << "BlahooWrapper::destructorHook - Calling delete\n";
 		std::cout.flush();
-		delete((WrapperSubclass*)wrapper_object); //(castBasePointer(base_pointer));
+		delete(castBasePointer(base_pointer));
 	}
-
-/*	
-	template <void_class_func void_function, typename... vargs>
-	static void voidFunctionHook(Base_Struct *base_pointer, void *subclass_pointer, vargs... args)
+	
+	
+	template <void_class_func void_function>
+	static void voidFunctionHook(Base_Struct *base_pointer)
 	{	//Given a pointer of a base struct object, calls a member function of the encompassing
 		//subclass object extending BlahooWrapper.
 		//Templated function creates instances for each member function of the deriving subclass.
-		std::cout << "BlahooWrapper::voidFunctionHook()1\n";
-		//WrapperSubclass *subclass_pointer = (WrapperSubclass*)base_pointer;  //Brutally cast data pointer to subclass object
-		((WrapperSubclass*)subclass_pointer->*void_function)(args...);  //Call the function in the subclass
-		std::cout << "BlahooWrapper::voidFunctionHook()2\n";
-		std::cout.flush();
-	}
-*/
-
-	template <void_class_func void_function, typename... vargs>
-	static void voidFunctionHook(Base_Struct *base_pointer, vargs... args)
-	{	//Given a pointer of a base struct object, calls a member function of the encompassing
-		//subclass object extending BlahooWrapper.
-		//Templated function creates instances for each member function of the deriving subclass.
-		std::cout << "BlahooWrapper::voidFunctionHook()1\n";
 		WrapperSubclass *subclass_pointer = castBasePointer(base_pointer);  //Get pointer to subclass object
-		(subclass_pointer->*void_function)(args...);  //Call the function in the subclass
-		std::cout << "BlahooWrapper::voidFunctionHook()2\n";
+		(subclass_pointer->*void_function)();  //Call the function in the subclass
+		std::cout << "BlahooWrapper::voidFunctionHook()\n";
 		std::cout.flush();
 	}
-
+	
+	
 	template <typename ret_type, ret_type (WrapperSubclass::*class_func)() >
 	static ret_type functionHook(Base_Struct *base_pointer)
 	{	//Given a pointer of a base struct object, calls a member function of the encompassing
@@ -160,26 +140,23 @@ class BlahooWrapperFunction
 		}
 		
 	protected: //All following class members are protected, as they need to be inherited by the deriving Wrapper Function classes
-		
 		WrapperSubclass *wrapper_class_obj; //instance object to use
 		member_function member_func;			//pointer to class member func
 		set_hook_function set_hook_func;		//pointer to the function used to set hook function pointer in base struct
 		base_function base_func;					//pointer to the struct related function that this wrapper binds to
 		Base_Struct *base_struct;					//pointer to the base object the parent wrapper is bound to
 	
-		BlahooWrapperFunction(base_function bf, set_hook_function shf, WrapperSubclass *subclass_obj, member_function m_function) :
-		 wrapper_class_obj(subclass_obj), member_func(m_function), set_hook_func(shf), base_func(bf ? bf : empty_base_func), base_struct(&subclass_obj->base_struct)
+		BlahooWrapperFunction(base_function bf, set_hook_function shf, WrapperSubclass *subclass_obj, member_function m_function)
 		{
 			//Constructor function to create a new wrapper function object
-/*	COMMENTED IN FAVOUR OF INITIALISATON LIST
-  		wrapper_class_obj = subclass_obj;
+			wrapper_class_obj = subclass_obj;
 			member_func = m_function;
 			set_hook_func=shf;  //Set pointer to the function which sets the callback hook in the base struct
 			if (bf)
 				base_func = bf;  //Set the pointer to the static base function which operates on the base struct
 			else
 				base_func = empty_base_func;
-			base_struct = &subclass_obj->base_struct; */
+			base_struct = &subclass_obj->base_struct;
 		} //End Constructor
 		
 	public:

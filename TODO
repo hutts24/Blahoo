@@ -1,16 +1,16 @@
 TODO LIST for Blahoo.
 
-- Use references
+- This library needs major rework and the static embedded structures need to be replaced with BLAH HANDLES.
+
+- Use references.
 
 - Move Blahoo code into new BlahOO namespace and get remove the Blahoo prefix from all names.
 
-- Only customisable Blah structures which use function pointers should be wrapped.
-
-- All wrapping classes should statically encapsulate base struictures.
+- ???? Only customisable Blah structures which use function pointers should be wrapped.
 
 - All Wrapping classes inherit a base 'wrapper' class which can then be extended.
 
-- Call back functions are hooked into Blah objects and reference the embedded static structure.
+- Call back functions are hooked into Blah objects and use the BLAH HANDLE contained within.
 
 - Extending class object pointers can be derived from base struct pointer by first straight casting the pointer to a wrapper object, then dynamically casting the wrapper pointer to the desired base class object pointer type.
 
