@@ -1,5 +1,7 @@
 TODO LIST for Blahoo.
 
+- Use references
+
 - Move Blahoo code into new BlahOO namespace and get remove the Blahoo prefix from all names.
 
 - Only customisable Blah structures which use function pointers should be wrapped.
