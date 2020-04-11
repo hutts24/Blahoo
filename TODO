@@ -1,0 +1,17 @@
+TODO LIST for Blahoo.
+
+- Move Blahoo code into new BlahOO namespace and get remove the Blahoo prefix from all names.
+
+- Only customisable Blah structures which use function pointers should be wrapped.
+
+- All wrapping classes should statically encapsulate base struictures.
+
+- All Wrapping classes inherit a base 'wrapper' class which can then be extended.
+
+- Call back functions are hooked into Blah objects and reference the embedded static structure.
+
+- Extending class object pointers can be derived from base struct pointer by first straight casting the pointer to a wrapper object, then dynamically casting the wrapper pointer to the desired base class object pointer type.
+
+- When wrapper classes are initalised, they should store pointers to the default functions of redefinable structs, so that they can be called later without any trouble.  This strategy avoids the need to make the default functions publically available, but also adds memory and processing overhead instead of just calling the default function directly.  However there is the extra benefit from the first strategy of being able to create generic function mapping objects for wrapper class objects.
+
+- Blahoo headers should not inherit Blah headers.  Forward declare any types required in Blahoo headers instead.
